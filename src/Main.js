@@ -1,7 +1,54 @@
 import { useState } from "react";
 import Button from "./MainComponents/Button";
+import MovieList from "./MainComponents/MovieList";
 
 export default function Main({ movies }) {
+  return (
+    <main className="main">
+      <MoviesBox />
+      <WatchedBox />
+    </main>
+  );
+}
+
+function MoviesBox() {
+  const [isOpen1, setIsOpen1] = useState(true);
+  const tempMovieData = [
+    {
+      imdbID: "tt1375666",
+      Title: "Inception",
+      Year: "2010",
+      Poster:
+        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+    },
+    {
+      imdbID: "tt0133093",
+      Title: "The Matrix",
+      Year: "1999",
+      Poster:
+        "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+    },
+    {
+      imdbID: "tt6751668",
+      Title: "Parasite",
+      Year: "2019",
+      Poster:
+        "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
+    },
+  ];
+
+  function handleToggle() {
+    setIsOpen1((open) => !open);
+  }
+  return (
+    <div className="box">
+      <Button isOpen={isOpen1} onToggle={handleToggle} />
+      {isOpen1 && <MovieList movies={tempMovieData} type="1" />}
+    </div>
+  );
+}
+
+function WatchedBox({ children }) {
   const tempWatchedData = [
     {
       imdbID: "tt1375666",
@@ -24,7 +71,6 @@ export default function Main({ movies }) {
       userRating: 9,
     },
   ];
-  const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
   const average = (arr) =>
     arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -34,86 +80,40 @@ export default function Main({ movies }) {
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
 
-  function handleToggle(type) {
-    if (type === "1") setIsOpen1((isOpen) => !isOpen);
-    else if (type === "2") setIsOpen2((isOpen) => !isOpen);
+  function handleToggle() {
+    setIsOpen2((open) => !open);
   }
 
   return (
-    <main className="main">
-      <div className="box">
-        <Button isOpen={isOpen1} onToggle={handleToggle} type="1" />
-
-        {isOpen1 && <MovieList movies={movies} type="1" />}
-      </div>
-
-      <div className="box">
-        <Button isOpen={isOpen2} onToggle={handleToggle} type="2" />
-        {isOpen2 && (
-          <>
-            <div className="summary">
-              <h2>Movies you watched</h2>
-              <div>
-                <p>
-                  <span>#️⃣</span>
-                  <span>{watched.length} movies</span>
-                </p>
-                <p>
-                  <span>⭐️</span>
-                  <span>{avgImdbRating}</span>
-                </p>
-                <p>
-                  <span>🌟</span>
-                  <span>{avgUserRating}</span>
-                </p>
-                <p>
-                  <span>⏳</span>
-                  <span>{avgRuntime} min</span>
-                </p>
-              </div>
-            </div>
-
-            <MovieList movies={watched} type="2" />
-          </>
-        )}
-      </div>
-    </main>
-  );
-}
-
-function MovieList({ movies, type }) {
-  return (
-    <ul className="list">
-      {movies?.map((movie) => (
-        <li key={movie.imdbID}>
-          <img src={movie.Poster} alt={`${movie.Title} poster`} />
-          <h3>{movie.Title}</h3>
-          {type === "1" && (
+    <div className="box">
+      <Button isOpen={isOpen2} onToggle={handleToggle} />
+      {isOpen2 && (
+        <>
+          <div className="summary">
+            <h2>Movies you watched</h2>
             <div>
               <p>
-                <span>🗓</span>
-                <span>{movie.Year}</span>
+                <span>#️⃣</span>
+                <span>{watched.length} movies</span>
               </p>
-            </div>
-          )}
-          {type === "2" && (
-            <div>
               <p>
                 <span>⭐️</span>
-                <span>{movie.imdbRating}</span>
+                <span>{avgImdbRating}</span>
               </p>
               <p>
                 <span>🌟</span>
-                <span>{movie.userRating}</span>
+                <span>{avgUserRating}</span>
               </p>
               <p>
                 <span>⏳</span>
-                <span>{movie.runtime} min</span>
+                <span>{avgRuntime} min</span>
               </p>
             </div>
-          )}
-        </li>
-      ))}
-    </ul>
+          </div>
+
+          <MovieList movies={watched} type="2" />
+        </>
+      )}
+    </div>
   );
 }

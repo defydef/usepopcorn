@@ -1,6 +1,6 @@
-export default function Button({ onToggle, isOpen, type }) {
+export default function Button({ isOpen, onToggle }) {
   return (
-    <button className="btn-toggle" onClick={() => onToggle(type)}>
+    <button className="btn-toggle" onClick={() => onToggle()}>
       {isOpen ? "–" : "+"}
     </button>
   );
