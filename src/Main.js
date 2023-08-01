@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "./MainComponents/Button";
 import MovieList from "./MainComponents/MovieList";
 
-export default function Main({ movies }) {
+export default function Main() {
   return (
     <main className="main">
       <MoviesBox />
@@ -48,7 +48,7 @@ function MoviesBox() {
   );
 }
 
-function WatchedBox({ children }) {
+function WatchedBox() {
   const tempWatchedData = [
     {
       imdbID: "tt1375666",
