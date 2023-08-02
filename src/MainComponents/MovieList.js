@@ -2,9 +2,7 @@ export default function MovieList({ movies, type }) {
   return (
     <ul className="list">
       {movies?.map((movie) => (
-        <li key={movie.imdbID}>
-          <img src={movie.Poster} alt={`${movie.Title} poster`} />
-          <h3>{movie.Title}</h3>
+        <Movie key={movie.imdbID} movie={movie}>
           {type === "all" && (
             <div>
               <p>
@@ -29,8 +27,18 @@ export default function MovieList({ movies, type }) {
               </p>
             </div>
           )}
-        </li>
+        </Movie>
       ))}
     </ul>
+  );
+}
+
+function Movie({ movie, children }) {
+  return (
+    <li>
+      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <h3>{movie.Title}</h3>
+      {children}
+    </li>
   );
 }
