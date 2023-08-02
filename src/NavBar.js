@@ -1,14 +1,9 @@
 import { useState } from "react";
 
 export function NavBar({ children }) {
-  const [query, setQuery] = useState("");
-  function handleSearch(searchQuery) {
-    setQuery(searchQuery);
-  }
   return (
     <nav className="nav-bar">
       <Logo />
-      <Search query={query} onSearch={handleSearch} />
       {children}
     </nav>
   );
@@ -23,14 +18,15 @@ function Logo() {
   );
 }
 
-function Search({ query, onSearch }) {
+export function Search() {
+  const [query, setQuery] = useState("");
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
       value={query}
-      onChange={(e) => onSearch(e.target.value)}
+      onChange={(e) => setQuery(e.target.value)}
     />
   );
 }

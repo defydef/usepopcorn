@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavBar, NumResult } from "./NavBar";
+import { NavBar, NumResult, Search } from "./NavBar";
 import Main from "./Main";
 import MovieList from "./MainComponents/MovieList";
 import { MoviesBox, WatchedBox } from "./Main";
@@ -32,6 +32,7 @@ export default function App() {
   return (
     <>
       <NavBar>
+        <Search />
         <NumResult movies={movies} />
       </NavBar>
       <Main>
