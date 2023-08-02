@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function NavBar({ movies }) {
+export function NavBar({ children }) {
   const [query, setQuery] = useState("");
   function handleSearch(searchQuery) {
     setQuery(searchQuery);
@@ -9,7 +9,7 @@ export default function NavBar({ movies }) {
     <nav className="nav-bar">
       <Logo />
       <Search query={query} onSearch={handleSearch} />
-      <NumResult movies={movies} />
+      {children}
     </nav>
   );
 }
@@ -35,7 +35,7 @@ function Search({ query, onSearch }) {
   );
 }
 
-function NumResult({ movies }) {
+export function NumResult({ movies }) {
   return (
     <p className="num-results">
       Found <strong>{movies.length}</strong> results

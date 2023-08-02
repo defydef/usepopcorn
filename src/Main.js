@@ -2,16 +2,11 @@ import { useState } from "react";
 import Button from "./MainComponents/Button";
 import MovieList from "./MainComponents/MovieList";
 
-export default function Main({ movies }) {
-  return (
-    <main className="main">
-      <MoviesBox movies={movies} />
-      <WatchedBox />
-    </main>
-  );
+export default function Main({ children }) {
+  return <main className="main">{children}</main>;
 }
 
-function MoviesBox({ movies }) {
+export function MoviesBox({ children }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
   function handleToggle() {
@@ -20,12 +15,12 @@ function MoviesBox({ movies }) {
   return (
     <div className="box">
       <Button isOpen={isOpen1} onToggle={handleToggle} />
-      {isOpen1 && <MovieList movies={movies} type="all"></MovieList>}
+      {isOpen1 && children}
     </div>
   );
 }
 
-function WatchedBox() {
+export function WatchedBox() {
   const tempWatchedData = [
     {
       imdbID: "tt1375666",
