@@ -43,7 +43,7 @@ function MoviesBox() {
   return (
     <div className="box">
       <Button isOpen={isOpen1} onToggle={handleToggle} />
-      {isOpen1 && <MovieList movies={tempMovieData} type="1" />}
+      {isOpen1 && <MovieList movies={tempMovieData} type="all" />}
     </div>
   );
 }
@@ -84,7 +84,7 @@ function WatchedBox() {
       {isOpen2 && (
         <>
           <WatchedSummary watched={watched} />
-          <MovieList movies={watched} type="2" />
+          <MovieList movies={watched} type="watched" />
         </>
       )}
     </div>

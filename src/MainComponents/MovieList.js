@@ -5,7 +5,7 @@ export default function MovieList({ movies, type }) {
         <li key={movie.imdbID}>
           <img src={movie.Poster} alt={`${movie.Title} poster`} />
           <h3>{movie.Title}</h3>
-          {type === "1" && (
+          {type === "all" && (
             <div>
               <p>
                 <span>🗓</span>
@@ -13,7 +13,7 @@ export default function MovieList({ movies, type }) {
               </p>
             </div>
           )}
-          {type === "2" && (
+          {type === "watched" && (
             <div>
               <p>
                 <span>⭐️</span>
