@@ -42,7 +42,8 @@ export default function StarRating({ maxRating = 3 }) {
   return (
     <div style={containerStyle}>
       <div style={starContainerStyle}>{star}</div>
-      <p style={textStyle}>{tempRating || rating || ""}</p>
+      <p style={textStyle}>{tempRating || rating || ""}</p>{" "}
+      {/*if there is tempRating, show tempRating. if no tempRating, show rating. if no rating show empty strings*/}
     </div>
   );
 }
