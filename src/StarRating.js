@@ -15,10 +15,12 @@ export default function StarRating({
   color = "#fcc419",
   size = 24,
   messages = [],
+  defaultRating = 0,
+  onSetRating,
 }) {
-  console.log(messages.length, maxRating);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
+
   const textStyle = {
     lineHeight: "0",
     margin: "0",
@@ -40,6 +42,7 @@ export default function StarRating({
 
   function handleClick(i) {
     setRating(i + 1);
+    onSetRating(i + 1);
   }
 
   function handleHover(i, movement) {
