@@ -32,8 +32,8 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
 
   fetch(`http://www.omdbapi.com/?apikey=${KEY.key}&s=interstellar`)
-    .then((res) => res.json)
-    .then((data) => console.log(data.toString));
+    .then((res) => res.json())
+    .then((data) => console.log(data));
 
   return (
     <>
