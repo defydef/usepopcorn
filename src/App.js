@@ -3,6 +3,7 @@ import { NavBar, NumResult, Search } from "./NavBar";
 import Main from "./Main";
 import MovieList from "./MainComponents/MovieList";
 import { MoviesBox, WatchedBox } from "./Main";
+import KEY from "./config/keys.json";
 
 export default function App() {
   const tempMovieData = [
@@ -29,6 +30,11 @@ export default function App() {
     },
   ];
   const [movies, setMovies] = useState(tempMovieData);
+
+  fetch(`http://www.omdbapi.com/?apikey=${KEY.key}&s=interstellar`)
+    .then((res) => res.json)
+    .then((data) => console.log(data.toString));
+
   return (
     <>
       <NavBar>
