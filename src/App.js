@@ -35,7 +35,7 @@ export default function App() {
     fetch(`http://www.omdbapi.com/?apikey=${KEY.key}&s=finding`)
       .then((res) => res.json())
       .then((data) => setMovies(data.Search));
-  }, []); // if we use [], it means that the data fetching is done only on component mount (initial render)
+  }, []); // if we use [], it means that the data fetching is done only on component first mount (after render)
 
   return (
     <>
