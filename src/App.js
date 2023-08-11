@@ -32,9 +32,14 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
 
   useEffect(function () {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY.key}&s=finding`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+    async function fetchMovies() {
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY.key}&s=finding`
+      );
+      const data = await res.json();
+      setMovies(data.Search);
+    }
+    fetchMovies();
   }, []); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
 
   return (
