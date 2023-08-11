@@ -30,14 +30,18 @@ export default function App() {
     },
   ];
   const [movies, setMovies] = useState(tempMovieData);
+  const [isLoading, setIsLoading] = useState(false);
+  const query = "finding";
 
   useEffect(function () {
     async function fetchMovies() {
+      setIsLoading(true);
       const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY.key}&s=finding`
+        `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
       );
       const data = await res.json();
-      setMovies(data.Search);
+      setMovies(() => data.Search);
+      setIsLoading(false);
     }
     fetchMovies();
   }, []); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
@@ -50,10 +54,18 @@ export default function App() {
       </NavBar>
       <Main>
         <MoviesBox>
-          <MovieList movies={movies} type="all"></MovieList>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <MovieList movies={movies} type="all"></MovieList>
+          )}
         </MoviesBox>
         <WatchedBox />
       </Main>
     </>
   );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
