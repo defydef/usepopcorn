@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavBar, NumResult, Search } from "./NavBar";
 import Main from "./Main";
 import MovieList from "./MainComponents/MovieList";
@@ -31,9 +31,11 @@ export default function App() {
   ];
   const [movies, setMovies] = useState(tempMovieData);
 
-  fetch(`http://www.omdbapi.com/?apikey=${KEY.key}&s=interstellar`)
-    .then((res) => res.json())
-    .then((data) => console.log(data));
+  useEffect(function () {
+    fetch(`http://www.omdbapi.com/?apikey=${KEY.key}&s=finding`)
+      .then((res) => res.json())
+      .then((data) => setMovies(data.Search));
+  }, []); // if we use [], it means that the data fetching is done only on component mount (initial render)
 
   return (
     <>
