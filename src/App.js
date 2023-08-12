@@ -32,33 +32,29 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "finding";
-  const errorMessage = "Something went wrong when fetching the movies";
+  const query = "dfljdkslfj";
+  const fetchingErrorMessage = "Something went wrong when fetching the movies";
 
   useEffect(function () {
-    try {
-      async function fetchMovies() {
+    async function fetchMovies() {
+      try {
         setIsLoading(true);
-        let res = {};
-        try {
-          res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
-          );
-        } catch (e) {
-          setError(e.message);
-        }
-        if (res.ok) {
-          const data = await res.json();
-          setMovies(() => data.Search);
-          setIsLoading(false);
-        } else {
-          setError(errorMessage);
-        }
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
+        );
+
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (data.Response === "False") throw new Error(data.Error);
+        setMovies(() => data.Search);
+        setIsLoading(false);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setIsLoading(false);
       }
-      fetchMovies();
-    } catch (e) {
-      setError(e.message);
     }
+    fetchMovies();
   }, []); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
 
   return (
