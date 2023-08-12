@@ -33,25 +33,31 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const query = "finding";
+  const errorMessage = "Something went wrong when fetching the movies";
 
   useEffect(function () {
     try {
       async function fetchMovies() {
         setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
-        );
-        if (!res.ok) {
-          throw new Error("Something went wrong with fetching movies");
+        let res = {};
+        try {
+          res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
+          );
+        } catch (e) {
+          setError(e.message);
         }
-        const data = await res.json();
-        setMovies(() => data.Search);
-        setIsLoading(false);
+        if (res.ok) {
+          const data = await res.json();
+          setMovies(() => data.Search);
+          setIsLoading(false);
+        } else {
+          setError(errorMessage);
+        }
       }
       fetchMovies();
-    } catch (err) {
-      console.error(err.message);
-      setError(err.message);
+    } catch (e) {
+      setError(e.message);
     }
   }, []); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
 
@@ -63,11 +69,11 @@ export default function App() {
       </NavBar>
       <Main>
         <MoviesBox>
-          {isLoading ? (
-            <Loader />
-          ) : (
+          {!isLoading && !error && (
             <MovieList movies={movies} type="all"></MovieList>
           )}
+          {isLoading && !error && <Loader />}
+          {error && <ErrorMessage message={error} />}
         </MoviesBox>
         <WatchedBox />
       </Main>
@@ -77,4 +83,13 @@ export default function App() {
 
 function Loader() {
   return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>⛔️ </span>
+      {message}
+    </p>
+  );
 }
