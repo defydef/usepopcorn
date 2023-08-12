@@ -31,19 +31,28 @@ export default function App() {
   ];
   const [movies, setMovies] = useState(tempMovieData);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const query = "finding";
 
   useEffect(function () {
-    async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
-      );
-      const data = await res.json();
-      setMovies(() => data.Search);
-      setIsLoading(false);
+    try {
+      async function fetchMovies() {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
+        );
+        if (!res.ok) {
+          throw new Error("Something went wrong with fetching movies");
+        }
+        const data = await res.json();
+        setMovies(() => data.Search);
+        setIsLoading(false);
+      }
+      fetchMovies();
+    } catch (err) {
+      console.error(err.message);
+      setError(err.message);
     }
-    fetchMovies();
   }, []); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
 
   return (
