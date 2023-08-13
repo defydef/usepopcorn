@@ -29,37 +29,44 @@ export default function App() {
         "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
     },
   ];
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const tempQuery = "finding";
   const [query, setQuery] = useState("");
 
   function handleQuery(q) {
     setQuery(q);
   }
 
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY.key}&s=${tempQuery}`
-        );
-
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        if (data.Response === "False") throw new Error(data.Error);
-        setMovies(() => data.Search);
-        setIsLoading(false);
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setIsLoading(false);
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setError("");
+          setIsLoading(true);
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
+          );
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          if (data.Response === "False") throw new Error(data.Error);
+          setMovies(() => data.Search);
+          setIsLoading(false);
+        } catch (e) {
+          setError(e.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
-    fetchMovies();
-  }, []); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
+      if (query.length < 3) {
+        setError("");
+        setMovies([]);
+        return;
+      }
+      fetchMovies();
+    },
+    [query]
+  ); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
 
   return (
     <>
