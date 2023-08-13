@@ -41,7 +41,6 @@ export default function App() {
 
   function handleSelectMovie(id) {
     setSelectedMovieId(id);
-    console.log(id);
   }
 
   useEffect(

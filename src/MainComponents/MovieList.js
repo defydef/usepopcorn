@@ -1,6 +1,6 @@
 export default function MovieList({ movies, type, onSelect }) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map((movie) => (
         <Movie key={movie.imdbID} movie={movie} onSelect={onSelect}>
           {type === "all" && (
