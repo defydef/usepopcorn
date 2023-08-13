@@ -1,8 +1,8 @@
-export default function MovieList({ movies, type }) {
+export default function MovieList({ movies, type, onSelect }) {
   return (
     <ul className="list">
       {movies?.map((movie) => (
-        <Movie key={movie.imdbID} movie={movie}>
+        <Movie key={movie.imdbID} movie={movie} onSelect={onSelect}>
           {type === "all" && (
             <div>
               <p>
@@ -33,9 +33,9 @@ export default function MovieList({ movies, type }) {
   );
 }
 
-function Movie({ movie, children }) {
+function Movie({ movie, children, onSelect }) {
   return (
-    <li>
+    <li onClick={() => onSelect(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       {children}

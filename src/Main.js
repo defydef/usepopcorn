@@ -6,7 +6,7 @@ export default function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-export function MoviesBox({ children }) {
+export function MoviesBox({ children, onSelect }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
   function handleToggle() {
@@ -14,7 +14,7 @@ export function MoviesBox({ children }) {
   }
   return (
     <div className="box">
-      <Button isOpen={isOpen1} onToggle={handleToggle} />
+      <Button isOpen={isOpen1} onToggle={handleToggle} onSelect={onSelect} />
       {isOpen1 && children}
     </div>
   );
@@ -44,7 +44,7 @@ export function WatchedBox() {
     },
   ];
   const [isOpen2, setIsOpen2] = useState(true);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
 
   function handleToggle() {
     setIsOpen2((open) => !open);
