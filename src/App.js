@@ -40,7 +40,11 @@ export default function App() {
   }
 
   function handleSelectMovie(id) {
-    setSelectedMovieId(id);
+    id === selectedMovieId ? setSelectedMovieId(null) : setSelectedMovieId(id);
+  }
+
+  function handleCloseMovie() {
+    setSelectedMovieId(null);
   }
 
   useEffect(
@@ -92,7 +96,10 @@ export default function App() {
           {error && <ErrorMessage message={error} />}
         </MoviesBox>
         {selectedMovieId ? (
-          <MovieDetails selectedMovieId={selectedMovieId} />
+          <MovieDetails
+            selectedMovieId={selectedMovieId}
+            onClose={handleCloseMovie}
+          />
         ) : (
           <WatchedBox />
         )}
@@ -114,10 +121,32 @@ function ErrorMessage({ message }) {
   );
 }
 
-function MovieDetails({ selectedMovieId }) {
+function MovieDetails({ selectedMovieId, onClose }) {
+  useEffect(
+    function () {
+      async function getMovieDetails() {
+        try {
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY.key}&i=${selectedMovieId}`
+          );
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          if (data.Response === "False") throw new Error(data.Error);
+        } catch (e) {
+          console.log(e.message);
+        }
+      }
+      getMovieDetails();
+    },
+    [selectedMovieId]
+  );
+
   return (
-    <div className="box details">
-      <p>{selectedMovieId}</p>
-    </div>
+    <MoviesBox>
+      <button className="btn-back" onClick={onClose}>
+        &larr;
+      </button>
+      <div className="details">{selectedMovieId}</div>
+    </MoviesBox>
   );
 }
