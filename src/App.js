@@ -107,6 +107,7 @@ export default function App() {
             selectedMovieId={selectedMovieId}
             onClose={handleCloseMovie}
             onAddWatched={handleAddWatchedMovie}
+            watched={watchedMovie}
           />
         ) : (
           <WatchedBox watchedMovies={watchedMovie} />
@@ -129,10 +130,14 @@ function ErrorMessage({ message }) {
   );
 }
 
-function MovieDetails({ selectedMovieId, onClose, onAddWatched, onSetRating }) {
+function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
+
+  const isWatched = watched
+    .map((movie) => movie.imdbID)
+    .includes(selectedMovieId);
 
   const {
     Title: title,
@@ -158,7 +163,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, onSetRating }) {
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
     };
-    onAddWatched(newWatchedMovie);
+    if (!isWatched) onAddWatched(newWatchedMovie);
   }
 
   useEffect(
