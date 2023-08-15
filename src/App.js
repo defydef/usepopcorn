@@ -122,6 +122,23 @@ function ErrorMessage({ message }) {
 }
 
 function MovieDetails({ selectedMovieId, onClose }) {
+  const [movie, setMovie] = useState({});
+
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Genre: genre,
+    Actors: actors,
+    Director: director,
+  } = movie;
+
+  console.log(title, year);
+
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -132,6 +149,7 @@ function MovieDetails({ selectedMovieId, onClose }) {
           if (!res.ok) throw new Error();
           const data = await res.json();
           if (data.Response === "False") throw new Error(data.Error);
+          setMovie(data);
         } catch (e) {
           console.log(e.message);
         }
@@ -143,9 +161,22 @@ function MovieDetails({ selectedMovieId, onClose }) {
 
   return (
     <MoviesBox>
+      <header></header>
       <button className="btn-back" onClick={onClose}>
         &larr;
       </button>
+      <img src={poster} alt={`Poster of ${title} movie`} />
+      <div className="details-overview">
+        <h2>{title}</h2>
+        <p>
+          {released} &bull; {runtime}
+        </p>
+        <p>{genre}</p>
+        <p>
+          <span>⭐️</span>
+          {imdbRating} IMDB rating
+        </p>
+      </div>
       <div className="details">{selectedMovieId}</div>
     </MoviesBox>
   );
