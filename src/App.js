@@ -4,6 +4,7 @@ import Main from "./Main";
 import MovieList from "./MainComponents/MovieList";
 import { MoviesBox, WatchedBox } from "./Main";
 import KEY from "./config/keys.json";
+import StarRating from "./StarRating";
 
 export default function App() {
   // const tempMovieData = [
@@ -161,23 +162,33 @@ function MovieDetails({ selectedMovieId, onClose }) {
 
   return (
     <MoviesBox>
-      <header></header>
-      <button className="btn-back" onClick={onClose}>
-        &larr;
-      </button>
-      <img src={poster} alt={`Poster of ${title} movie`} />
-      <div className="details-overview">
-        <h2>{title}</h2>
-        <p>
-          {released} &bull; {runtime}
-        </p>
-        <p>{genre}</p>
-        <p>
-          <span>⭐️</span>
-          {imdbRating} IMDB rating
-        </p>
+      <div className="details">
+        <header>
+          <button className="btn-back" onClick={onClose}>
+            &larr;
+          </button>
+          <img src={poster} alt={`Poster of ${title} movie`} />
+          <div className="details-overview">
+            <h2>{title}</h2>
+            <p>
+              {released} &bull; {runtime}
+            </p>
+            <p>{genre}</p>
+            <p>
+              <span>⭐️</span>
+              {imdbRating} IMDB rating
+            </p>
+          </div>
+        </header>
+        <section>
+          <StarRating maxRating={10} />
+          <p>
+            <em>{plot}</em>
+          </p>
+          <p>Starring {actors}</p>
+          <p>Directed by {director}</p>
+        </section>
       </div>
-      <div className="details">{selectedMovieId}</div>
     </MoviesBox>
   );
 }
