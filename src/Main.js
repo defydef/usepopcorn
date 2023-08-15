@@ -20,7 +20,7 @@ export function MoviesBox({ children, onSelect }) {
   );
 }
 
-export function WatchedBox() {
+export function WatchedBox({ watchedMovies }) {
   const tempWatchedData = [
     {
       imdbID: "tt1375666",
@@ -44,7 +44,7 @@ export function WatchedBox() {
     },
   ];
   const [isOpen2, setIsOpen2] = useState(true);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(watchedMovies);
 
   function handleToggle() {
     setIsOpen2((open) => !open);

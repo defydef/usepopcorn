@@ -35,6 +35,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("finding");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const [watchedMovie, setWatchedMovie] = useState([]);
 
   function handleQuery(q) {
     setQuery(q);
@@ -46,6 +47,11 @@ export default function App() {
 
   function handleCloseMovie() {
     setSelectedMovieId(null);
+  }
+
+  function handleAddWatchedMovie(newMovie) {
+    setWatchedMovie((prevWatchedMovie) => [...prevWatchedMovie, newMovie]);
+    handleCloseMovie();
   }
 
   useEffect(
@@ -100,9 +106,10 @@ export default function App() {
           <MovieDetails
             selectedMovieId={selectedMovieId}
             onClose={handleCloseMovie}
+            onAddWatched={handleAddWatchedMovie}
           />
         ) : (
-          <WatchedBox />
+          <WatchedBox watchedMovies={watchedMovie} />
         )}
       </Main>
     </>
@@ -122,10 +129,10 @@ function ErrorMessage({ message }) {
   );
 }
 
-function MovieDetails({ selectedMovieId, onClose }) {
+function MovieDetails({ selectedMovieId, onClose, onAddWatched, onSetRating }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [movieRating, setMovieRating] = useState(0);
+  const [userRating, setUserRating] = useState(0);
 
   const {
     Title: title,
@@ -139,8 +146,20 @@ function MovieDetails({ selectedMovieId, onClose }) {
     Actors: actors,
     Director: director,
   } = movie;
+  movie.userRating = userRating;
 
-  console.log(title, year);
+  function handleAdd() {
+    const newWatchedMovie = {
+      imdbID: selectedMovieId,
+      title,
+      year,
+      Poster: poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0)),
+      userRating,
+    };
+    onAddWatched(newWatchedMovie);
+  }
 
   useEffect(
     function () {
@@ -189,7 +208,12 @@ function MovieDetails({ selectedMovieId, onClose }) {
             </div>
           </header>
           <section>
-            <StarRating maxRating={10} onSetRating={setMovieRating} />
+            <StarRating maxRating={10} onSetRating={setUserRating} />
+            {userRating > 0 && (
+              <button className="btn-add" onClick={handleAdd}>
+                Add to list
+              </button>
+            )}
             <p>
               <em>{plot}</em>
             </p>
