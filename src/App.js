@@ -33,7 +33,7 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("finding");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
 
   function handleQuery(q) {
@@ -125,6 +125,7 @@ function ErrorMessage({ message }) {
 function MovieDetails({ selectedMovieId, onClose }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [movieRating, setMovieRating] = useState(0);
 
   const {
     Title: title,
@@ -188,7 +189,7 @@ function MovieDetails({ selectedMovieId, onClose }) {
             </div>
           </header>
           <section>
-            <StarRating maxRating={10} />
+            <StarRating maxRating={10} onSetRating={setMovieRating} />
             <p>
               <em>{plot}</em>
             </p>
