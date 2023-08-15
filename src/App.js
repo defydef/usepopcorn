@@ -124,6 +124,7 @@ function ErrorMessage({ message }) {
 
 function MovieDetails({ selectedMovieId, onClose }) {
   const [movie, setMovie] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     Title: title,
@@ -144,6 +145,7 @@ function MovieDetails({ selectedMovieId, onClose }) {
     function () {
       async function getMovieDetails() {
         try {
+          setIsLoading(true);
           const res = await fetch(
             `http://www.omdbapi.com/?apikey=${KEY.key}&i=${selectedMovieId}`
           );
@@ -153,6 +155,8 @@ function MovieDetails({ selectedMovieId, onClose }) {
           setMovie(data);
         } catch (e) {
           console.log(e.message);
+        } finally {
+          setIsLoading(false);
         }
       }
       getMovieDetails();
@@ -162,33 +166,37 @@ function MovieDetails({ selectedMovieId, onClose }) {
 
   return (
     <MoviesBox>
-      <div className="details">
-        <header>
-          <button className="btn-back" onClick={onClose}>
-            &larr;
-          </button>
-          <img src={poster} alt={`Poster of ${title} movie`} />
-          <div className="details-overview">
-            <h2>{title}</h2>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="details">
+          <header>
+            <button className="btn-back" onClick={onClose}>
+              &larr;
+            </button>
+            <img src={poster} alt={`Poster of ${title} movie`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐️</span>
+                {imdbRating} IMDB rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <StarRating maxRating={10} />
             <p>
-              {released} &bull; {runtime}
+              <em>{plot}</em>
             </p>
-            <p>{genre}</p>
-            <p>
-              <span>⭐️</span>
-              {imdbRating} IMDB rating
-            </p>
-          </div>
-        </header>
-        <section>
-          <StarRating maxRating={10} />
-          <p>
-            <em>{plot}</em>
-          </p>
-          <p>Starring {actors}</p>
-          <p>Directed by {director}</p>
-        </section>
-      </div>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </div>
+      )}
     </MoviesBox>
   );
 }
