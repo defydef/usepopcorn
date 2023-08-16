@@ -139,6 +139,12 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
     .map((movie) => movie.imdbID)
     .includes(selectedMovieId);
 
+  const currMovieRating = watched.find(
+    (movie) => movie.imdbID === selectedMovieId
+  )?.userRating; // ?. only gets userRating if the watched.find object is not null
+
+  console.log(currMovieRating);
+
   const {
     Title: title,
     Year: year,
@@ -158,7 +164,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
       imdbID: selectedMovieId,
       title,
       year,
-      Poster: poster,
+      poster,
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
@@ -213,12 +219,20 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
             </div>
           </header>
           <section>
-            <StarRating maxRating={10} onSetRating={setUserRating} />
-            {userRating > 0 && (
-              <button className="btn-add" onClick={handleAdd}>
-                Add to list
-              </button>
-            )}
+            <div className="rating">
+              {!isWatched ? (
+                <>
+                  <StarRating maxRating={10} onSetRating={setUserRating} />
+                  {userRating > 0 && (
+                    <button className="btn-add" onClick={handleAdd}>
+                      Add to list
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>You rated this movie {userRating}</p>
+              )}
+            </div>
             <p>
               <em>{plot}</em>
             </p>

@@ -36,8 +36,8 @@ export default function MovieList({ movies, type, onSelect }) {
 function Movie({ movie, children, onSelect }) {
   return (
     <li onClick={() => onSelect(movie.imdbID)}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.Poster || movie.poster} alt={`${movie.Title} poster`} />
+      <h3>{movie.Title || movie.title}</h3>
       {children}
     </li>
   );
