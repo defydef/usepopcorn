@@ -60,6 +60,8 @@ export default function App() {
     );
   }
 
+  if (!selectedMovieId) document.title = "🍿Use Popcorn";
+
   useEffect(
     function () {
       async function fetchMovies() {
@@ -114,6 +116,7 @@ export default function App() {
             onClose={handleCloseMovie}
             onAddWatched={handleAddWatchedMovie}
             watched={watchedMovie}
+            allMovies={movies}
           />
         ) : (
           <WatchedBox
@@ -139,7 +142,13 @@ function ErrorMessage({ message }) {
   );
 }
 
-function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
+function MovieDetails({
+  selectedMovieId,
+  onClose,
+  onAddWatched,
+  watched,
+  allMovies,
+}) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
@@ -151,6 +160,10 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
   const currMovieRating = watched.find(
     (movie) => movie.imdbID === selectedMovieId
   )?.userRating; // ?. only gets userRating if the watched.find object is not null
+
+  const currMovieTitle = allMovies.find(
+    (movie) => movie.imdbID === selectedMovieId
+  )?.Title;
 
   const {
     Title: title,
@@ -200,6 +213,13 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
       getMovieDetails();
     },
     [selectedMovieId]
+  );
+
+  useEffect(
+    function () {
+      document.title = currMovieTitle;
+    },
+    [currMovieTitle]
   );
 
   return (
