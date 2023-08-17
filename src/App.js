@@ -116,7 +116,6 @@ export default function App() {
             onClose={handleCloseMovie}
             onAddWatched={handleAddWatchedMovie}
             watched={watchedMovie}
-            allMovies={movies}
           />
         ) : (
           <WatchedBox
@@ -142,13 +141,7 @@ function ErrorMessage({ message }) {
   );
 }
 
-function MovieDetails({
-  selectedMovieId,
-  onClose,
-  onAddWatched,
-  watched,
-  allMovies,
-}) {
+function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
@@ -160,10 +153,6 @@ function MovieDetails({
   const currMovieRating = watched.find(
     (movie) => movie.imdbID === selectedMovieId
   )?.userRating; // ?. only gets userRating if the watched.find object is not null
-
-  const currMovieTitle = allMovies.find(
-    (movie) => movie.imdbID === selectedMovieId
-  )?.Title;
 
   const {
     Title: title,
@@ -217,9 +206,9 @@ function MovieDetails({
 
   useEffect(
     function () {
-      document.title = currMovieTitle;
+      document.title = title;
     },
-    [currMovieTitle]
+    [title]
   );
 
   return (
