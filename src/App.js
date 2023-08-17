@@ -7,33 +7,10 @@ import KEY from "./config/keys.json";
 import StarRating from "./StarRating";
 
 export default function App() {
-  // const tempMovieData = [
-  //   {
-  //     imdbID: "tt1375666",
-  //     Title: "Inception",
-  //     Year: "2010",
-  //     Poster:
-  //       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  //   },
-  //   {
-  //     imdbID: "tt0133093",
-  //     Title: "The Matrix",
-  //     Year: "1999",
-  //     Poster:
-  //       "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  //   },
-  //   {
-  //     imdbID: "tt6751668",
-  //     Title: "Parasite",
-  //     Year: "2019",
-  //     Poster:
-  //       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  //   },
-  // ];
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("finding");
+  const [query, setQuery] = useState("");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [watchedMovie, setWatchedMovie] = useState([]);
 
@@ -109,15 +86,16 @@ export default function App() {
       </NavBar>
       <Main>
         <MoviesBox>
-          {!isLoading && !error && (
+          {!isLoading && !error && query.length > 2 && (
             <MovieList
               movies={movies}
               type="all"
               onSelect={handleSelectMovie}
             ></MovieList>
           )}
-          {isLoading && !error && <Loader />}
+          {isLoading && !error && <Info className="loader">Loading...</Info>}
           {error && <ErrorMessage message={error} />}
+          {!isLoading && !error && !query && <Info>Type movie details...</Info>}
         </MoviesBox>
         {selectedMovieId ? (
           <MovieDetails
@@ -137,8 +115,8 @@ export default function App() {
   );
 }
 
-function Loader() {
-  return <p className="loader">Loading...</p>;
+function Info({ className, children }) {
+  return <p className={`info ${className}`}>{children}</p>;
 }
 
 function ErrorMessage({ message }) {
@@ -245,7 +223,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
   return (
     <MoviesBox>
       {isLoading ? (
-        <Loader />
+        <Info className="loader">Loading...</Info>
       ) : (
         <div className="details">
           <header>
