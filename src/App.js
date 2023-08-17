@@ -60,8 +60,6 @@ export default function App() {
     );
   }
 
-  if (!selectedMovieId) document.title = "🍿Use Popcorn";
-
   useEffect(
     function () {
       async function fetchMovies() {
@@ -206,9 +204,15 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
 
   useEffect(
     function () {
-      document.title = title;
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+
+      // cleanup function: executed when the component is unmounted
+      return function () {
+        document.title = "🍿Use Popcorn";
+      };
     },
-    [title]
+    [title, selectedMovieId]
   );
 
   return (
