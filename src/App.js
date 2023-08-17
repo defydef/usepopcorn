@@ -226,6 +226,22 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
     [title, selectedMovieId]
   );
 
+  useEffect(
+    function () {
+      function cleanupCallback(e) {
+        if (e.code === "Escape") onClose();
+      }
+
+      document.addEventListener("keydown", cleanupCallback);
+
+      // cleanup function
+      return function () {
+        document.removeEventListener("keydown", cleanupCallback);
+      };
+    },
+    [onClose]
+  );
+
   return (
     <MoviesBox>
       {isLoading ? (
