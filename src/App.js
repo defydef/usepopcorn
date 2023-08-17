@@ -62,30 +62,41 @@ export default function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setError("");
           setIsLoading(true);
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`,
+            { signal: controller.signal }
           );
           if (!res.ok) throw new Error();
           const data = await res.json();
           if (data.Response === "False") throw new Error(data.Error);
           setMovies(() => data.Search);
           setIsLoading(false);
+          setError("");
         } catch (e) {
-          setError(e.message);
+          if (e.name !== "AbortError") setError(e.message);
         } finally {
           setIsLoading(false);
         }
       }
+
       if (query.length < 3) {
         setError("");
         setMovies([]);
         return;
       }
+
       fetchMovies();
+
+      // cleanup function
+      return function () {
+        controller.abort();
+      };
     },
     [query]
   ); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
