@@ -1,4 +1,4 @@
-export default function MovieList({ movies, type, onSelect }) {
+export default function MovieList({ movies, type, onSelect, onDelete }) {
   return (
     <ul className="list list-movies">
       {movies?.map((movie) => (
@@ -12,20 +12,28 @@ export default function MovieList({ movies, type, onSelect }) {
             </div>
           )}
           {type === "watched" && (
-            <div>
-              <p>
-                <span>⭐️</span>
-                <span>{movie.imdbRating}</span>
-              </p>
-              <p>
-                <span>🌟</span>
-                <span>{movie.userRating}</span>
-              </p>
-              <p>
-                <span>⏳</span>
-                <span>{movie.runtime} min</span>
-              </p>
-            </div>
+            <>
+              <div>
+                <p>
+                  <span>⭐️</span>
+                  <span>{movie.imdbRating}</span>
+                </p>
+                <p>
+                  <span>🌟</span>
+                  <span>{movie.userRating}</span>
+                </p>
+                <p>
+                  <span>⏳</span>
+                  <span>{movie.runtime} min</span>
+                </p>
+              </div>
+              <button
+                className="btn-delete"
+                onClick={() => onDelete(movie.imdbID)}
+              >
+                X
+              </button>
+            </>
           )}
         </Movie>
       ))}

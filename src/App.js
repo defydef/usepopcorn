@@ -54,6 +54,12 @@ export default function App() {
     handleCloseMovie();
   }
 
+  function handleDeleteWatched(id) {
+    setWatchedMovie((prevWatchedMovie) =>
+      prevWatchedMovie.filter((movie) => movie.imdbID !== id)
+    );
+  }
+
   useEffect(
     function () {
       async function fetchMovies() {
@@ -110,7 +116,10 @@ export default function App() {
             watched={watchedMovie}
           />
         ) : (
-          <WatchedBox watchedMovies={watchedMovie} />
+          <WatchedBox
+            watchedMovies={watchedMovie}
+            onDelete={handleDeleteWatched}
+          />
         )}
       </Main>
     </>
@@ -143,8 +152,6 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
     (movie) => movie.imdbID === selectedMovieId
   )?.userRating; // ?. only gets userRating if the watched.find object is not null
 
-  console.log(currMovieRating);
-
   const {
     Title: title,
     Year: year,
@@ -166,7 +173,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
       year,
       poster,
       imdbRating: Number(imdbRating),
-      runtime: Number(runtime.split(" ").at(0)),
+      runtime: runtime !== "N/A" ? Number(runtime.split(" ").at(0)) : 0,
       userRating,
     };
     if (!isWatched) onAddWatched(newWatchedMovie);
@@ -230,7 +237,9 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
                   )}
                 </>
               ) : (
-                <p>You rated this movie {userRating}</p>
+                <p>
+                  You rated this movie {currMovieRating} <span>⭐️</span>
+                </p>
               )}
             </div>
             <p>

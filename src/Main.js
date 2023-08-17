@@ -20,7 +20,7 @@ export function MoviesBox({ children, onSelect }) {
   );
 }
 
-export function WatchedBox({ watchedMovies }) {
+export function WatchedBox({ watchedMovies, onDelete }) {
   const tempWatchedData = [
     {
       imdbID: "tt1375666",
@@ -44,10 +44,13 @@ export function WatchedBox({ watchedMovies }) {
     },
   ];
   const [isOpen2, setIsOpen2] = useState(true);
-  const [watched, setWatched] = useState(watchedMovies);
 
   function handleToggle() {
     setIsOpen2((open) => !open);
+  }
+
+  function handleSelect() {
+    return;
   }
 
   return (
@@ -55,8 +58,13 @@ export function WatchedBox({ watchedMovies }) {
       <Button isOpen={isOpen2} onToggle={handleToggle} />
       {isOpen2 && (
         <>
-          <WatchedSummary watched={watched} />
-          <MovieList movies={watched} type="watched" />
+          <WatchedSummary watched={watchedMovies} />
+          <MovieList
+            movies={watchedMovies}
+            type="watched"
+            onSelect={handleSelect}
+            onDelete={onDelete}
+          />
         </>
       )}
     </div>
@@ -67,7 +75,9 @@ function WatchedSummary({ watched }) {
   const average = (arr) =>
     arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgUserRating = average(
+    watched.map((movie) => Number(movie.userRating))
+  );
   const avgRuntime = average(watched.map((movie) => movie.runtime));
   return (
     <div className="summary">
@@ -79,7 +89,7 @@ function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
