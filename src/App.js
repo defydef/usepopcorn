@@ -202,7 +202,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
         document.title = "🍿Use Popcorn";
       };
     },
-    [title, selectedMovieId]
+    [title]
   );
 
   useEffect(
