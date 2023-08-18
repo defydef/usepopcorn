@@ -14,7 +14,7 @@ export default function App() {
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [watchedMovie, setWatchedMovie] = useState(function () {
     return JSON.parse(localStorage.getItem("watched"));
-  }); // initialize values in watchedMovie using local storage item, this only executes on initial render
+  }); // initialize values in watchedMovie using callback function that get values from local storage. his only executes on initial render
 
   function handleQuery(q) {
     setQuery(q);
