@@ -12,7 +12,9 @@ export default function App() {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
-  const [watchedMovie, setWatchedMovie] = useState([]);
+  const [watchedMovie, setWatchedMovie] = useState(function () {
+    return JSON.parse(localStorage.getItem("watched"));
+  }); // initialize values in watchedMovie using local storage item, this only executes on initial render
 
   function handleQuery(q) {
     setQuery(q);
@@ -28,7 +30,6 @@ export default function App() {
 
   function handleAddWatchedMovie(newMovie) {
     setWatchedMovie((prevWatchedMovie) => [...prevWatchedMovie, newMovie]);
-    handleCloseMovie();
   }
 
   function handleDeleteWatched(id) {
@@ -36,6 +37,13 @@ export default function App() {
       prevWatchedMovie.filter((movie) => movie.imdbID !== id)
     );
   }
+
+  useEffect(
+    function (movie) {
+      localStorage.setItem("watched", JSON.stringify(watchedMovie));
+    },
+    [watchedMovie]
+  );
 
   useEffect(
     function () {
@@ -167,6 +175,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
       userRating,
     };
     if (!isWatched) onAddWatched(newWatchedMovie);
+    onClose();
   }
 
   useEffect(
