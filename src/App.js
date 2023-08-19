@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavBar, NumResult, Search } from "./NavBar";
 import Main from "./Main";
 import MovieList from "./MainComponents/MovieList";
@@ -36,6 +36,10 @@ export default function App() {
     setWatchedMovie((prevWatchedMovie) =>
       prevWatchedMovie.filter((movie) => movie.imdbID !== id)
     );
+  }
+
+  function handleClearQuery() {
+    setQuery("");
   }
 
   useEffect(
@@ -90,7 +94,11 @@ export default function App() {
   return (
     <>
       <NavBar>
-        <Search query={query} onSearch={handleQuery} />
+        <Search
+          query={query}
+          onSearch={handleQuery}
+          onClearQuery={handleClearQuery}
+        />
         <NumResult movies={movies} />
       </NavBar>
       <Main>
@@ -142,6 +150,17 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
 
+  const countRef = useRef(0);
+
+  useEffect(
+    function () {
+      if (userRating) {
+        countRef.current = countRef.current + 1;
+      }
+    },
+    [userRating]
+  );
+
   const isWatched = watched
     .map((movie) => movie.imdbID)
     .includes(selectedMovieId);
@@ -173,7 +192,9 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
       imdbRating: Number(imdbRating),
       runtime: runtime !== "N/A" ? Number(runtime.split(" ").at(0)) : 0,
       userRating,
+      countRatingDecision: countRef.current,
     };
+    console.log(newWatchedMovie);
     if (!isWatched) onAddWatched(newWatchedMovie);
     onClose();
   }

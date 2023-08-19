@@ -18,13 +18,27 @@ function Logo() {
   );
 }
 
-export function Search({ query, onSearch }) {
+export function Search({ query, onSearch, onClearQuery }) {
   const inputEl = useRef(null);
 
-  useEffect(function () {
-    console.log(inputEl.current);
-    inputEl.current.focus();
-  }, []);
+  useEffect(
+    function () {
+      function callback(e) {
+        if (document.activeElement === inputEl.current) return;
+
+        if (e.code === "Enter") {
+          inputEl.current.focus();
+          onClearQuery();
+        }
+      }
+      document.addEventListener("keydown", callback);
+      inputEl.current.focus();
+
+      // cleanup effect
+      return () => document.removeEventListener("keydown", callback);
+    },
+    [onClearQuery]
+  );
 
   return (
     <input
