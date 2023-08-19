@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 export function NavBar({ children }) {
   return (
     <nav className="nav-bar">
@@ -17,6 +19,13 @@ function Logo() {
 }
 
 export function Search({ query, onSearch }) {
+  const inputEl = useRef(null);
+
+  useEffect(function () {
+    console.log(inputEl.current);
+    inputEl.current.focus();
+  }, []);
+
   return (
     <input
       className="search"
@@ -24,6 +33,7 @@ export function Search({ query, onSearch }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => onSearch(e.target.value)}
+      ref={inputEl}
     />
   );
 }
