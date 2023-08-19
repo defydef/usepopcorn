@@ -6,15 +6,14 @@ import { MoviesBox, WatchedBox } from "./Main";
 import KEY from "./config/keys.json";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
 
 export default function App() {
   const [query, setQuery] = useState("");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const { movies, isLoading, error } = useMovies(query);
 
-  const [watchedMovie, setWatchedMovie] = useState(function () {
-    return JSON.parse(localStorage.getItem("watched"));
-  }); // initialize values in watchedMovie using callback function that get values from local storage. this only executes on initial render
+  const [watchedMovie, setWatchedMovie] = useLocalStorageState([], "watched");
 
   function handleQuery(q) {
     setQuery(q);
@@ -42,13 +41,6 @@ export default function App() {
   function handleClearQuery() {
     setQuery("");
   }
-
-  useEffect(
-    function (movie) {
-      localStorage.setItem("watched", JSON.stringify(watchedMovie));
-    },
-    [watchedMovie]
-  );
 
   return (
     <>
