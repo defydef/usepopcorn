@@ -5,16 +5,16 @@ import MovieList from "./MainComponents/MovieList";
 import { MoviesBox, WatchedBox } from "./Main";
 import KEY from "./config/keys.json";
 import StarRating from "./StarRating";
+import { useMovies } from "./useMovies";
 
 export default function App() {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const { movies, isLoading, error } = useMovies(query);
+
   const [watchedMovie, setWatchedMovie] = useState(function () {
     return JSON.parse(localStorage.getItem("watched"));
-  }); // initialize values in watchedMovie using callback function that get values from local storage. his only executes on initial render
+  }); // initialize values in watchedMovie using callback function that get values from local storage. this only executes on initial render
 
   function handleQuery(q) {
     setQuery(q);
@@ -25,6 +25,7 @@ export default function App() {
   }
 
   function handleCloseMovie() {
+    // close movie details before fetching new movies
     setSelectedMovieId(null);
   }
 
@@ -48,48 +49,6 @@ export default function App() {
     },
     [watchedMovie]
   );
-
-  useEffect(
-    function () {
-      const controller = new AbortController();
-
-      async function fetchMovies() {
-        try {
-          setError("");
-          setIsLoading(true);
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY.key}&s=${query}`,
-            { signal: controller.signal }
-          );
-          if (!res.ok) throw new Error();
-          const data = await res.json();
-          if (data.Response === "False") throw new Error(data.Error);
-          setMovies(() => data.Search);
-          setIsLoading(false);
-          setError("");
-        } catch (e) {
-          if (e.name !== "AbortError") setError(e.message);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-
-      if (query.length < 3) {
-        setError("");
-        setMovies([]);
-        return;
-      }
-
-      handleCloseMovie(); // close movie details before fetching new movies
-      fetchMovies();
-
-      // cleanup function
-      return function () {
-        controller.abort();
-      };
-    },
-    [query]
-  ); // if we use [], it means that the data fetching is done only after the component mounts (initial render)
 
   return (
     <>
