@@ -12,6 +12,5 @@ export function useLocalStorageState(initialState, itemName) {
     },
     [itemStored, itemName]
   );
-
   return [itemStored, setItemStored];
 }

@@ -7,6 +7,7 @@ import KEY from "./config/keys.json";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 export default function App() {
   const [query, setQuery] = useState("");
@@ -186,21 +187,22 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
     [title]
   );
 
-  useEffect(
-    function () {
-      function cleanupCallback(e) {
-        if (e.code === "Escape") onClose();
-      }
+  // useEffect(
+  //   function () {
+  //     function cleanupCallback(e) {
+  //       if (e.code === "Escape") onClose();
+  //     }
 
-      document.addEventListener("keydown", cleanupCallback);
+  //     document.addEventListener("keydown", cleanupCallback);
 
-      // cleanup function
-      return function () {
-        document.removeEventListener("keydown", cleanupCallback);
-      };
-    },
-    [onClose]
-  );
+  //     // cleanup function
+  //     return function () {
+  //       document.removeEventListener("keydown", cleanupCallback);
+  //     };
+  //   },
+  //   [onClose]
+  // );
+  useKey(onClose);
 
   return (
     <MoviesBox>
