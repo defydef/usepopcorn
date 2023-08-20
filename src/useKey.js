@@ -1,17 +1,10 @@
 import { useEffect } from "react";
 
-export function useKey(callback, inputRef) {
+export function useKey(callback, key) {
   useEffect(
     function () {
       function cleanupCallback(e) {
-        if (e.code === "Escape") callback();
-        if (e.code === "Enter") {
-          if (inputRef) {
-            if (document.activeElement === inputRef.current) return;
-            inputRef.current.focus();
-          }
-          callback();
-        }
+        if (e.code.toLowerCase() === key.toLowerCase()) callback();
       }
       document.addEventListener("keydown", cleanupCallback);
 
@@ -20,6 +13,6 @@ export function useKey(callback, inputRef) {
         document.removeEventListener("keydown", cleanupCallback);
       };
     },
-    [callback, inputRef]
+    [callback, key]
   );
 }

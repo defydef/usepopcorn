@@ -202,7 +202,7 @@ function MovieDetails({ selectedMovieId, onClose, onAddWatched, watched }) {
   //   },
   //   [onClose]
   // );
-  useKey(onClose);
+  useKey(onClose, "Escape");
 
   return (
     <MoviesBox>

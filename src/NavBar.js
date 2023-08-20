@@ -22,13 +22,17 @@ function Logo() {
 export function Search({ query, onSearch, onClearQuery }) {
   const inputEl = useRef(null);
 
-  useKey(onClearQuery, inputEl);
+  useKey(function () {
+    if (document.activeElement === inputEl.current) return;
+    inputEl.current.focus();
+    onClearQuery();
+  }, "Enter");
   // useEffect(
   //   function () {
   //     function callback(e) {
-  //       if (document.activeElement === inputEl.current) return;
 
   //       if (e.code === "Enter") {
+  // if (document.activeElement === inputEl.current) return;
   //         inputEl.current.focus();
   //         onClearQuery();
   //       }
